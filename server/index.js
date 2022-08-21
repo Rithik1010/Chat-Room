@@ -15,6 +15,7 @@ app.use(cors());
 
 const server = http.createServer(app);
 
+// Connecting our backend to our frontend
 const io = new Server(server, {
     cors: {
         origin: "http://localhost:3000",
@@ -23,9 +24,17 @@ const io = new Server(server, {
 })
 
 io.on("connection", (socket) => {
-    console.log("User Connected ", socket.id);
+    console.log("User Connected: ", socket.id);
+
+    // Creating an event on the backend to handle emit events on the frontend.
+    // This determines when someone wants to join the room.
+    socket.on("join_room", (room) => {
+        socket.join(room);
+        console.log(`User with ID: ${socket.id} joined room ${room}`);
+    })
+
     socket.on("disconnect", () => {
-        console.log("User Disconnected ", socket.id);
+        console.log("User Disconnected: ", socket.id);
     })
 })
 
