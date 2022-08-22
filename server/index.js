@@ -33,8 +33,9 @@ io.on("connection", (socket) => {
         console.log(`User with ID: ${socket.id} joined room ${room}`);
     })
 
+    // This determines when someone wants to send a message.
     socket.on("send_message", (messageData) => {
-        console.log(messageData);
+        socket.to(messageData.room).emit("receive_message", messageData);
     })
 
     socket.on("disconnect", () => {
